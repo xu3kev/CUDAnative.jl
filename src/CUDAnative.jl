@@ -63,13 +63,10 @@ function __init__()
     else
         # instantiate a default device and context;
         # this will be implicitly used through `CuCurrentContext`
-        # NOTE: although these conceptually match what the primary context is for,
-        #       we don't use that because it is refcounted separately
-        #       and might confuse / be confused by user operations
-        #       (eg. calling `unsafe_reset!` on a primary context)
         initialized[] = true
         default_device[] = CuDevice(0)
-        default_context[] = CuContext(default_device[])
+        pctx = CuPrimaryContext(default_device[])
+        default_context[] = CuContext(pctx)
     end
 end
 
