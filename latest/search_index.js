@@ -161,9 +161,9 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "man/hacking.html#Generated-fnuctions-1",
+    "location": "man/hacking.html#Generated-functions-1",
     "page": "Hacking",
-    "title": "Generated fnuctions",
+    "title": "Generated functions",
     "category": "section",
     "text": "Generated functions are used heavily in CUDAnative.jl, in combination with LLVM.jl, to generate type-specialized code and IR. If evaluating the generator results in an error, Julia generates a dynamic call to the generator for you to inspect the error at run-time. This is a problem in the world of GPUs, where dynamic calls are prohibited. A band-aid is to print the exception during inference:diff --git a/base/inference.jl b/base/inference.jl\nindex 6443665676..b03d78ddaa 100644\n--- a/base/inference.jl\n+++ b/base/inference.jl\n@@ -2430,7 +2430,10 @@ function typeinf_frame(linfo::MethodInstance, caller, optimize::Bool, cached::Bo\n             try\n                 # user code might throw errors – ignore them\n                 src = get_staged(linfo)\n-            catch\n+            catch ex\n+                println(\"WARNING: An error occurred during generated function execution.\")\n+                println(ex)\n+                ccall(:jlbacktrace, Void, ())\n                 return nothing\n             end\n         else"
 },
