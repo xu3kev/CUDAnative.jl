@@ -473,11 +473,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "lib/device/intrinsics.html#CUDAnative.sync_warp",
+    "page": "Intrinsics",
+    "title": "CUDAnative.sync_warp",
+    "category": "Function",
+    "text": "sync_warp(mask::Integer=0xffffffff)\n\nWaits threads in the warp, selected by means of the bitmask mask, have reached this point and all global and shared memory accesses made by these threads prior to sync_warp() are visible to those threads in the warp. The default value for mask selects all threads in the warp.\n\n\n\n"
+},
+
+{
     "location": "lib/device/intrinsics.html#Synchronization-1",
     "page": "Intrinsics",
     "title": "Synchronization",
     "category": "section",
-    "text": "CUDAnative.sync_threads"
+    "text": "CUDAnative.sync_threads\nCUDAnative.sync_warp"
 },
 
 {
@@ -517,7 +525,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Intrinsics",
     "title": "CUDAnative.shfl",
     "category": "Function",
-    "text": "shfl(val, lane::Integer, width::Integer=32)\nshfl_sync(val, lane::Integer, width::Integer=32, threadmask::UInt32=0xffffffff)\n\nShuffle a value from a directly indexed lane lane.\n\n\n\n"
+    "text": "shfl(val, lane::Integer, width::Integer=32)\n\nShuffle a value from a directly indexed lane lane.\n\n\n\n"
 },
 
 {
@@ -525,7 +533,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Intrinsics",
     "title": "CUDAnative.shfl_up",
     "category": "Function",
-    "text": "shfl_up(val, delta::Integer, width::Integer=32)\nshfl_up_sync(val, delta::Integer, width::Integer=32, threadmask::UInt32=0xffffffff)\n\nShuffle a value from a lane with lower ID relative to caller.\n\n\n\n"
+    "text": "shfl_up(val, delta::Integer, width::Integer=32)\n\nShuffle a value from a lane with lower ID relative to caller.\n\n\n\n"
 },
 
 {
@@ -533,7 +541,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Intrinsics",
     "title": "CUDAnative.shfl_down",
     "category": "Function",
-    "text": "shfl_down(val, delta::Integer, width::Integer=32)\nshfl_down_sync(val, delta::Integer, width::Integer=32, threadmask::UInt32=0xffffffff)\n\nShuffle a value from a lane with higher ID relative to caller.\n\n\n\n"
+    "text": "shfl_down(val, delta::Integer, width::Integer=32)\n\nShuffle a value from a lane with higher ID relative to caller.\n\n\n\n"
 },
 
 {
@@ -541,7 +549,39 @@ var documenterSearchIndex = {"docs": [
     "page": "Intrinsics",
     "title": "CUDAnative.shfl_xor",
     "category": "Function",
-    "text": "shfl_xor(val, mask::Integer, width::Integer=32)\nshfl_xor_sync(val, mask::Integer, width::Integer=32, threadmask::UInt32=0xffffffff)\n\nShuffle a value from a lane based on bitwise XOR of own lane ID with mask.\n\n\n\n"
+    "text": "shfl_xor(val, mask::Integer, width::Integer=32)\n\nShuffle a value from a lane based on bitwise XOR of own lane ID with mask.\n\n\n\n"
+},
+
+{
+    "location": "lib/device/intrinsics.html#CUDAnative.shfl_sync",
+    "page": "Intrinsics",
+    "title": "CUDAnative.shfl_sync",
+    "category": "Function",
+    "text": "shfl_sync(val, lane::Integer, width::Integer=32, threadmask::UInt32=0xffffffff)\n\nShuffle a value from a directly indexed lane lane. The default value for threadmask performs the shuffle on all threads in the warp.\n\n\n\n"
+},
+
+{
+    "location": "lib/device/intrinsics.html#CUDAnative.shfl_up_sync",
+    "page": "Intrinsics",
+    "title": "CUDAnative.shfl_up_sync",
+    "category": "Function",
+    "text": "shfl_up_sync(val, delta::Integer, width::Integer=32, threadmask::UInt32=0xffffffff)\n\nShuffle a value from a lane with lower ID relative to caller. The default value for threadmask performs the shuffle on all threads in the warp.\n\n\n\n"
+},
+
+{
+    "location": "lib/device/intrinsics.html#CUDAnative.shfl_down_sync",
+    "page": "Intrinsics",
+    "title": "CUDAnative.shfl_down_sync",
+    "category": "Function",
+    "text": "shfl_down_sync(val, delta::Integer, width::Integer=32, threadmask::UInt32=0xffffffff)\n\nShuffle a value from a lane with higher ID relative to caller. The default value for threadmask performs the shuffle on all threads in the warp.\n\n\n\n"
+},
+
+{
+    "location": "lib/device/intrinsics.html#CUDAnative.shfl_xor_sync",
+    "page": "Intrinsics",
+    "title": "CUDAnative.shfl_xor_sync",
+    "category": "Function",
+    "text": "shfl_xor_sync(val, mask::Integer, width::Integer=32, threadmask::UInt32=0xffffffff)\n\nShuffle a value from a lane based on bitwise XOR of own lane ID with mask. The default value for threadmask performs the shuffle on all threads in the warp.\n\n\n\n"
 },
 
 {
@@ -549,7 +589,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Intrinsics",
     "title": "Warp Shuffle",
     "category": "section",
-    "text": "CUDAnative.shfl\nCUDAnative.shfl_up\nCUDAnative.shfl_down\nCUDAnative.shfl_xor"
+    "text": "CUDAnative.shfl\nCUDAnative.shfl_up\nCUDAnative.shfl_down\nCUDAnative.shfl_xorIf using CUDA 9.0, and PTX ISA 6.0 is supported, synchronizing versions of these intrinsics are available as well:CUDAnative.shfl_sync\nCUDAnative.shfl_up_sync\nCUDAnative.shfl_down_sync\nCUDAnative.shfl_xor_sync"
 },
 
 {
