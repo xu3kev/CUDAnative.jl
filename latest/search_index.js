@@ -261,7 +261,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection",
     "title": "CUDAnative.code_llvm",
     "category": "Function",
-    "text": "code_llvm([io], f, types; optimize=true, dump_module=false, cap::VersionNumber)\n\nPrints the LLVM IR generated for the method matching the given generic function and type signature to io which defaults to STDOUT. The IR is optimized according to optimize (defaults to true), and the entire module, including headers and other functions, is dumped if dump_module is set (defaults to false). The device capability cap to generate code for defaults to the current active device's capability, or v\"2.0\" if there is no such active context.\n\n\n\n"
+    "text": "code_llvm([io], f, types; optimize=true, dump_module=false, cap::VersionNumber)\n\nPrints the device LLVM IR generated for the method matching the given generic function and type signature to io which defaults to STDOUT. The IR is optimized according to optimize (defaults to true), and the entire module, including headers and other functions, is dumped if dump_module is set (defaults to false). The device capability cap to generate code for defaults to the current active device's capability, or v\"2.0\" if there is no such active context.\n\nSee also: @device_code_llvm, Base.code_llvm\n\n\n\n"
 },
 
 {
@@ -269,7 +269,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection",
     "title": "CUDAnative.code_ptx",
     "category": "Function",
-    "text": "code_ptx([io], f, types; cap::VersionNumber, kernel::Bool=false)\n\nPrints the PTX assembly generated for the method matching the given generic function and type signature to io which defaults to STDOUT. The device capability cap to generate code for defaults to the current active device's capability, or v\"2.0\" if there is no such active context. The optional kernel parameter indicates whether the function in question is an entry-point function, or a regular device function.\n\n\n\n"
+    "text": "code_ptx([io], f, types; cap::VersionNumber, kernel::Bool=false)\n\nPrints the PTX assembly generated for the method matching the given generic function and type signature to io which defaults to STDOUT. The device capability cap to generate code for defaults to the current active device's capability, or v\"2.0\" if there is no such active context. The optional kernel parameter indicates whether the function in question is an entry-point function, or a regular device function.\n\nSee also: @device_code_ptx\n\n\n\n"
 },
 
 {
@@ -277,7 +277,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection",
     "title": "CUDAnative.code_sass",
     "category": "Function",
-    "text": "code_sass([io], f, types, cap::VersionNumber)\n\nPrints the SASS code generated for the method matching the given generic function and type signature to io which defaults to STDOUT. The device capability cap to generate code for defaults to the current active device's capability, or v\"2.0\" if there is no such active context.\n\nNote that the method needs to be a valid entry-point kernel, ie. it should not return any values.\n\n\n\n"
+    "text": "code_sass([io], f, types, cap::VersionNumber)\n\nPrints the SASS code generated for the method matching the given generic function and type signature to io which defaults to STDOUT. The device capability cap to generate code for defaults to the current active device's capability, or v\"2.0\" if there is no such active context. The method needs to be a valid entry-point kernel, eg. it should not return any values.\n\nSee also: @device_code_sass\n\n\n\n"
 },
 
 {
@@ -289,51 +289,51 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "lib/reflection.html#CUDAnative.@code_lowered",
+    "location": "lib/reflection.html#CUDAnative.@device_code_lowered",
     "page": "Reflection",
-    "title": "CUDAnative.@code_lowered",
+    "title": "CUDAnative.@device_code_lowered",
     "category": "Macro",
-    "text": "code_lowered\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_lowered on the resulting expression. Can be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
+    "text": "@device_code_lowered ex\n\nEvaluates the expression ex and returns the result of Base.code_lowered for every compiled CUDA kernel.\n\nSee also: Base.@code_lowered\n\n\n\n"
 },
 
 {
-    "location": "lib/reflection.html#CUDAnative.@code_typed",
+    "location": "lib/reflection.html#CUDAnative.@device_code_typed",
     "page": "Reflection",
-    "title": "CUDAnative.@code_typed",
+    "title": "CUDAnative.@device_code_typed",
     "category": "Macro",
-    "text": "code_typed\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_typed on the resulting expression. Can be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
+    "text": "@device_code_typed ex\n\nEvaluates the expression ex and returns the result of Base.code_typed for every compiled CUDA kernel.\n\nSee also: Base.@code_typed\n\n\n\n"
 },
 
 {
-    "location": "lib/reflection.html#CUDAnative.@code_warntype",
+    "location": "lib/reflection.html#CUDAnative.@device_code_warntype",
     "page": "Reflection",
-    "title": "CUDAnative.@code_warntype",
+    "title": "CUDAnative.@device_code_warntype",
     "category": "Macro",
-    "text": "code_warntype\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_warntype on the resulting expression. Can be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
+    "text": "@device_code_warntype [io::IO=STDOUT] ex\n\nEvaluates the expression ex and prints the result of Base.code_warntype to io for every compiled CUDA kernel.\n\nSee also: Base.@code_warntype\n\n\n\n"
 },
 
 {
-    "location": "lib/reflection.html#CUDAnative.@code_llvm",
+    "location": "lib/reflection.html#CUDAnative.@device_code_llvm",
     "page": "Reflection",
-    "title": "CUDAnative.@code_llvm",
+    "title": "CUDAnative.@device_code_llvm",
     "category": "Macro",
-    "text": "code_llvm\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_llvm on the resulting expression. Can be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
+    "text": "@device_code_llvm [io::IO=STDOUT] [optimize::Bool=true] [dump_module::Bool=false] ex\n\nEvaluates the expression ex and prints the result of Base.code_llvm to io for every compiled CUDA kernel. The optimize keyword argument determines whether the code is optimized, and dump_module can be used to print the entire LLVM module instead of only the entry-point function.\n\nSee also: Base.@code_llvm\n\n\n\n"
 },
 
 {
-    "location": "lib/reflection.html#CUDAnative.@code_ptx",
+    "location": "lib/reflection.html#CUDAnative.@device_code_ptx",
     "page": "Reflection",
-    "title": "CUDAnative.@code_ptx",
+    "title": "CUDAnative.@device_code_ptx",
     "category": "Macro",
-    "text": "code_ptx\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_ptx on the resulting expression. Can be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
+    "text": "@device_code_ptx [io::IO=STDOUT] ex\n\nEvaluates the expression ex and prints the result of CUDAnative.code_ptx to io for every compiled CUDA kernel.\n\n\n\n"
 },
 
 {
-    "location": "lib/reflection.html#CUDAnative.@code_sass",
+    "location": "lib/reflection.html#CUDAnative.@device_code_sass",
     "page": "Reflection",
-    "title": "CUDAnative.@code_sass",
+    "title": "CUDAnative.@device_code_sass",
     "category": "Macro",
-    "text": "code_sass\n\nExtracts the relevant function call from any @cuda invocation, evaluates the arguments to the function or macro call, determines their types (taking into account GPU-specific type conversions), and calls code_sass on the resulting expression. Can be applied to a pure function call, or a call prefixed with the @cuda macro. In that case, kernel code generation conventions are used (wrt. argument conversions, return values, etc).\n\n\n\n"
+    "text": "@device_code_sass [io::IO=STDOUT] ex\n\nEvaluates the expression ex and prints the result of CUDAnative.code_sass to io for every compiled CUDA kernel.\n\n\n\n"
 },
 
 {
@@ -341,7 +341,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection",
     "title": "Convenience macros",
     "category": "section",
-    "text": "For ease of use, CUDAnative.jl also implements @code_ macros wrapping the above reflection functionality. These macros determines the type of arguments (taking into account GPU type conversions), and call the underlying code_ function. In addition, these functions understand the @cuda invocation syntax, so you conveniently put them in front an existing @cuda invocation.CUDAnative.@code_lowered\nCUDAnative.@code_typed\nCUDAnative.@code_warntype\nCUDAnative.@code_llvm\nCUDAnative.@code_ptx\nCUDAnative.@code_sass"
+    "text": "For ease of use, CUDAnative.jl also implements @device_code_ macros wrapping the above reflection functionality. These macros evaluate the expression argument, while tracing compilation and finally printing or returning the code for every invoked CUDA kernel. Do note that this evaluation can have side effects, as opposed to similarly-named @code_ macros in Base which are free of side effects.CUDAnative.@device_code_lowered\nCUDAnative.@device_code_typed\nCUDAnative.@device_code_warntype\nCUDAnative.@device_code_llvm\nCUDAnative.@device_code_ptx\nCUDAnative.@device_code_sass"
 },
 
 {
