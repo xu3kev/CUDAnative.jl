@@ -45,7 +45,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Usage",
     "title": "Quick start",
     "category": "section",
-    "text": "First you have to write the kernel function and make sure it only uses features from the CUDA-supported subset of Julia:using CUDAnative\n\nfunction kernel_vadd(a, b, c)\n    i = (blockIdx().x-1) * blockDim().x + threadIdx().x\n    c[i] = a[i] + b[i]\n\n    return nothing\nend\nUsing the @cuda macro, you can launch the kernel on a GPU of your choice:using CUDAdrv, CUDAnative\nusing Base.Test\n\n# CUDAdrv functionality: generate and upload data\na = round.(rand(Float32, (3, 4)) * 100)\nb = round.(rand(Float32, (3, 4)) * 100)\nd_a = CuArray(a)\nd_b = CuArray(b)\nd_c = similar(d_a)  # output array\n\n# run the kernel and fetch results\n# syntax: @cuda (dims...) kernel(args...)\n@cuda (1,12) kernel_vadd(d_a, d_b, d_c)\n\n# CUDAdrv functionality: download data\n# this synchronizes the device\nc = Array(d_c)\n\n@test a+b ≈ cThis code is executed in a default, global context for the first device in your system. The compiler queries the context through CuCurrentContext, which implies you can easily switch contexts (using a different device, or supplying different flags) by activating a different one:dev = CuDevice(0)\nCuContext(dev) do ctx\n    # allocate things in this context\n    @cuda ...\nend"
+    "text": "First you have to write the kernel function and make sure it only uses features from the CUDA-supported subset of Julia:using CUDAnative\n\nfunction kernel_vadd(a, b, c)\n    i = (blockIdx().x-1) * blockDim().x + threadIdx().x\n    c[i] = a[i] + b[i]\n\n    return nothing\nend\nUsing the @cuda macro, you can launch the kernel on a GPU of your choice:using CUDAdrv, CUDAnative\nusing Base.Test\n\n# CUDAdrv functionality: generate and upload data\na = round.(rand(Float32, (3, 4)) * 100)\nb = round.(rand(Float32, (3, 4)) * 100)\nd_a = CuArray(a)\nd_b = CuArray(b)\nd_c = similar(d_a)  # output array\n\n# run the kernel and fetch results\n# syntax: @cuda [kwargs...] kernel(args...)\n@cuda threads=12 kernel_vadd(d_a, d_b, d_c)\n\n# CUDAdrv functionality: download data\n# this synchronizes the device\nc = Array(d_c)\n\n@test a+b ≈ cThis code is executed in a default, global context for the first device in your system. The compiler queries the context through CuCurrentContext, which implies you can easily switch contexts (using a different device, or supplying different flags) by activating a different one:dev = CuDevice(0)\nCuContext(dev) do ctx\n    # allocate things in this context\n    @cuda ...\nend"
 },
 
 {
@@ -53,7 +53,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Usage",
     "title": "Julia support",
     "category": "section",
-    "text": "Only a limited subset of Julia is supported by this package. This subset is undocumented, as it is too much in flux.In general, GPU support of Julia code is determined by the language features used by the code. Several parts of the language are downright disallowed, such as calls to the Julia runtime, or garbage allocations. Other features might get reduced in strength, eg. throwing exceptions will result in a trap.If your code is incompatible with GPU execution, the compiler will mention the unsupported feature, and where the use came from:julia> foo(i) = (print(\"can't do this\"); return nothing)\nfoo (generic function with 1 method)\n\njulia> @cuda (1,1) foo(1)\nERROR: error compiling foo: error compiling print: generic call to unsafe_write requires the runtime language featureIn addition, the JIT doesn't support certain modes of compilation. For example, recursive functions require a proper cached compilation, which is currently absent."
+    "text": "Only a limited subset of Julia is supported by this package. This subset is undocumented, as it is too much in flux.In general, GPU support of Julia code is determined by the language features used by the code. Several parts of the language are downright disallowed, such as calls to the Julia runtime, or garbage allocations. Other features might get reduced in strength, eg. throwing exceptions will result in a trap.If your code is incompatible with GPU execution, the compiler will mention the unsupported feature, and where the use came from:julia> foo(i) = (print(\"can't do this\"); return nothing)\nfoo (generic function with 1 method)\n\njulia> @cuda foo(1)\nERROR: error compiling foo: error compiling print: generic call to unsafe_write requires the runtime language featureIn addition, the JIT doesn't support certain modes of compilation. For example, recursive functions require a proper cached compilation, which is currently absent."
 },
 
 {
@@ -221,7 +221,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Compilation & Execution",
     "title": "CUDAnative.@cuda",
     "category": "Macro",
-    "text": "@cuda (gridDim::CuDim, blockDim::CuDim, [shmem::Int], [stream::CuStream]) func(args...)\n\nHigh-level interface for calling functions on a GPU, queues a kernel launch on the current context. The gridDim and blockDim arguments represent the launch configuration, the optional shmem parameter specifies how much bytes of dynamic shared memory should be allocated (defaulting to 0), while the optional stream parameter indicates on which stream the launch should be scheduled.\n\nThe func argument should be a valid Julia function. It will be compiled to a CUDA function upon first use, and to a certain extent arguments will be converted and managed automatically (see cudaconvert). Finally, a call to cudacall is performed, scheduling the compiled function for execution on the GPU.\n\n\n\n"
+    "text": "@cuda [kwargs...] func(args...)\n\nHigh-level interface for calling functions on a GPU, queues a kernel launch on the current context. The @cuda macro should prefix a kernel invocation, with one of the following arguments in the kwargs position:\n\nAffecting the kernel launch:\n\nthreads (defaults to 1)\nblocks (defaults to 1)\nshmem (defaults to 0)\nstream (defaults to the default stream)\n\nAffecting the kernel compilation:\n\nminthreads: the required number of threads in a thread block.\nmaxthreads: the maximum number of threads in a thread block.\nblocks_per_sm: a minimum number of thread blocks to be scheduled on a single multiprocessor.\nmaxregs: the maximum number of registers to be allocated to a single thread (only supported on LLVM 4.0+)\n\nNote that, contrary to with CUDA C, you can invoke the same kernel multiple times with different compilation parameters. New code will be generated automatically.\n\nThe func argument should be a valid Julia function. It will be compiled to a CUDA function upon first use, and to a certain extent arguments will be converted and managed automatically (see cudaconvert). Finally, a call to cudacall is performed, scheduling the compiled function for execution on the GPU.\n\n\n\n"
 },
 
 {
@@ -317,7 +317,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection",
     "title": "CUDAnative.@device_code_llvm",
     "category": "Macro",
-    "text": "@device_code_llvm [io::IO=STDOUT] [optimize::Bool=true] [dump_module::Bool=false] ex\n\nEvaluates the expression ex and prints the result of Base.code_llvm to io for every compiled CUDA kernel. The optimize keyword argument determines whether the code is optimized, and dump_module can be used to print the entire LLVM module instead of only the entry-point function.\n\nSee also: Base.@code_llvm\n\n\n\n"
+    "text": "@device_code_llvm [io::IO=STDOUT, ...] ex\n\nEvaluates the expression ex and prints the result of Base.code_llvm to io for every compiled CUDA kernel. For other supported keywords, see CUDAnative.code_llvm.\n\nSee also: Base.@code_llvm\n\n\n\n"
 },
 
 {
@@ -325,7 +325,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection",
     "title": "CUDAnative.@device_code_ptx",
     "category": "Macro",
-    "text": "@device_code_ptx [io::IO=STDOUT] ex\n\nEvaluates the expression ex and prints the result of CUDAnative.code_ptx to io for every compiled CUDA kernel.\n\n\n\n"
+    "text": "@device_code_ptx [io::IO=STDOUT, ...] ex\n\nEvaluates the expression ex and prints the result of CUDAnative.code_ptx to io for every compiled CUDA kernel. For other supported keywords, see CUDAnative.code_ptx.\n\n\n\n"
 },
 
 {
@@ -333,7 +333,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reflection",
     "title": "CUDAnative.@device_code_sass",
     "category": "Macro",
-    "text": "@device_code_sass [io::IO=STDOUT] ex\n\nEvaluates the expression ex and prints the result of CUDAnative.code_sass to io for every compiled CUDA kernel.\n\n\n\n"
+    "text": "@device_code_sass [io::IO=STDOUT, ...] ex\n\nEvaluates the expression ex and prints the result of CUDAnative.code_sass to io for every compiled CUDA kernel. For other supported keywords, see CUDAnative.code_sass.\n\n\n\n"
 },
 
 {

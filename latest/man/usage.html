@@ -18,8 +18,8 @@ d_b = CuArray(b)
 d_c = similar(d_a)  # output array
 
 # run the kernel and fetch results
-# syntax: @cuda (dims...) kernel(args...)
-@cuda (1,12) kernel_vadd(d_a, d_b, d_c)
+# syntax: @cuda [kwargs...] kernel(args...)
+@cuda threads=12 kernel_vadd(d_a, d_b, d_c)
 
 # CUDAdrv functionality: download data
 # this synchronizes the device
@@ -32,5 +32,5 @@ CuContext(dev) do ctx
 end</code></pre><h2><a class="nav-anchor" id="Julia-support-1" href="#Julia-support-1">Julia support</a></h2><p>Only a limited subset of Julia is supported by this package. This subset is undocumented, as it is too much in flux.</p><p>In general, GPU support of Julia code is determined by the language features used by the code. Several parts of the language are downright disallowed, such as calls to the Julia runtime, or garbage allocations. Other features might get reduced in strength, eg. throwing exceptions will result in a <code>trap</code>.</p><p>If your code is incompatible with GPU execution, the compiler will mention the unsupported feature, and where the use came from:</p><pre><code class="language-none">julia&gt; foo(i) = (print(&quot;can&#39;t do this&quot;); return nothing)
 foo (generic function with 1 method)
 
-julia&gt; @cuda (1,1) foo(1)
+julia&gt; @cuda foo(1)
 ERROR: error compiling foo: error compiling print: generic call to unsafe_write requires the runtime language feature</code></pre><p>In addition, the JIT doesn&#39;t support certain modes of compilation. For example, recursive functions require a proper cached compilation, which is currently absent.</p><h2><a class="nav-anchor" id="CUDA-support-1" href="#CUDA-support-1">CUDA support</a></h2><p>Not all of CUDA is supported, and because of time constraints the supported subset is again undocumented. The following (incomplete) list details the support and their CUDAnative.jl names. Most are implemented in <code>intrinsics.jl</code>, so have a look at that file for a more up to date list:</p><ul><li><p>Indexing: <code>threadIdx().{x,y,z}</code>, <code>blockDim()</code>, <code>blockIdx()</code>, <code>gridDim()</code>, <code>warpsize()</code></p></li><li><p>Shared memory: <code>@cuStaticSharedMemory</code>, <code>@cuDynamicSharedMemory</code></p></li><li><p>Array type: <code>CuDeviceArray</code> (converted from input <code>CuArray</code>s, or shared memory)</p></li><li><p>I/O: <code>@cuprintf</code></p></li><li><p>Synchronization: <code>sync_threads</code></p></li><li><p>Communication: <code>vote_{all,any,ballot}</code></p></li><li><p>Data movement: <code>shfl_{up,down,bfly,idx}</code></p></li></ul><h3><a class="nav-anchor" id="libdevice-1" href="#libdevice-1"><code>libdevice</code></a></h3><p>In addition to the native intrinsics listed above, math functionality from <code>libdevice</code> is wrapped and part of CUDAnative. For now, you need to fully qualify function calls to these intrinsics, which provide similar functionality to some of the low-level math functionality of Base which would otherwise call out to <code>libm</code>.</p><footer><hr/><a class="previous" href="../index.html"><span class="direction">Previous</span><span class="title">Home</span></a><a class="next" href="troubleshooting.html"><span class="direction">Next</span><span class="title">Troubleshooting</span></a></footer></article></body></html>
