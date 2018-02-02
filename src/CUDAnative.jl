@@ -1,5 +1,3 @@
-__precompile__()
-
 module CUDAnative
 
 using CUDAapi
@@ -7,6 +5,8 @@ using CUDAdrv
 
 using LLVM
 using LLVM.Interop
+
+using Cassette
 
 VERSION >= v"0.7.0-DEV.3382" && using Libdl
 

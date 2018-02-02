@@ -46,7 +46,14 @@ function raise_exception(insblock::BasicBlock, ex::Value)
     call!(builder, trap)
 end
 
+Cassette.@context GPUctx
+
 function irgen(@nospecialize(f), @nospecialize(tt))
+    # patch the IR
+    info("Original IR for $f, $tt\n"); println(code_warntype(f, tt))
+    f = Cassette.overdub(GPUctx, f)
+    info("Overdubbed IR for $f, $tt\n"); println(code_warntype(f, tt))
+
     # get the method instance
     isa(f, Core.Builtin) && throw(ArgumentError("argument is not a generic function"))
     world = typemax(UInt)
