@@ -73,8 +73,7 @@ function irgen(@nospecialize(f), @nospecialize(tt))
         ref = convert(LLVM.API.LLVMModuleRef, ref)
         push!(dependencies, LLVM.Module(ref))
     end
-    params = Base.CodegenParams(cached=false,
-                                track_allocations=false,
+    params = Base.CodegenParams(track_allocations=false,
                                 code_coverage=false,
                                 static_alloc=false,
                                 prefer_specsig=true,

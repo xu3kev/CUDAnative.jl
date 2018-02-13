@@ -19,7 +19,7 @@ end
 if VERSION < v"0.7.0-DEV.1669"
     hook_module_activation(ref::Ptr{Cvoid}) = nothing
     hooks = Base.CodegenHooks(module_activation=hook_module_activation)
-    params = Base.CodegenParams(cached=false, runtime=false, hooks=hooks)
+    params = Base.CodegenParams(runtime=false, hooks=hooks)
     _dump_function(post17057_parent, Tuple{Ptr{Int64}},
                    #=native=#false, #=wrapper=#false, #=strip=#false,
                    #=dump_module=#true, #=syntax=#:att, #=optimize=#false,
@@ -27,7 +27,7 @@ if VERSION < v"0.7.0-DEV.1669"
 end
 
 # bug 2: default module activation segfaulted on NULL child function if cached=false
-params = Base.CodegenParams(cached=false)
+params = Base.CodegenParams()
 _dump_function(post17057_parent, Tuple{Ptr{Int64}},
                #=native=#false, #=wrapper=#false, #=strip=#false,
                #=dump_module=#true, #=syntax=#:att, #=optimize=#false,
