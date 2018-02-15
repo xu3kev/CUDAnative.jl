@@ -114,6 +114,7 @@ function irgen(@nospecialize(f), @nospecialize(tt))
         end
     end
 
+    linkage!(llvm_specfunc, LLVM.API.LLVMExternalLinkage)
     return llvm_mod, llvm_specfunc
 end
 
