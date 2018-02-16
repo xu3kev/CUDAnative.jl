@@ -107,9 +107,9 @@ function irgen(@nospecialize(f), @nospecialize(tt))
         # (LLVM ought to do this, see eg. D17738 and D19126), but fails
         # TODO: fix all globals?
         if !isdeclaration(llvm_func)
-            fn = safe_fn(llvm_func)
-            if fn != fn
-                LLVM.name!(llvm_func, fn)
+            fn′ = safe_fn(llvm_func)
+            if fn′ != fn
+                LLVM.name!(llvm_func, fn′)
             end
         end
     end
