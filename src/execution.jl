@@ -40,7 +40,6 @@ end
 isghosttype(dt) = !dt.mutable && sizeof(dt) == 0
 
 
-
 """
     @cuda [kwargs...] func(args...)
 
